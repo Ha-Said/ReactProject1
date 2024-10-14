@@ -1,10 +1,20 @@
-import React from "react";
-import Form from "./form.jsx";
+import React, { useState } from "react";
+import Form from "./form";
+import CardList from "./CardList";
+
 function App() {
+  const [cards, setCards] = useState([]);
+
+  const addCard = (newCard) => {
+    setCards([...cards, newCard]);
+  };
+
   return (
-    <>
-      <Form></Form>
-    </>
+    <div>
+      <Form addCard={addCard} />
+
+      <CardList cards={cards} />
+    </div>
   );
 }
 
