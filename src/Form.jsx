@@ -5,28 +5,57 @@ function Form({ addCard }) {
   const [userIcon, setUserIcon] = useState("");
   const [userName, setUserName] = useState("");
   const [description, setDescription] = useState("");
-  const [twitterLink, setTwitterLink] = useState("");
-  const [instagramLink, setInstagramLink] = useState("");
-  const [linkedinLink, setLinkedinLink] = useState("");
+  const [twitterLink, setTwitterLink] = useState("x.com");
+  const [instagramLink, setInstagramLink] = useState("Instagram.com");
+  const [linkedinLink, setLinkedinLink] = useState("Linkdin.com");
+  const [error, setError] = useState("");
+
+  const validateUrl = (url, platform) => {
+    let regex;
+    switch (platform) {
+      case "twitter":
+        regex =
+          /^(https?:\/\/)?(www\.)?(twitter\.com\/[A-Za-z0-9_]{1,15}\/?|x\.com\/[A-Za-z0-9_]{1,15}\/?|twitter\.com\/[^\/]+\/status\/\d+\/?)$/;
+        break;
+      case "instagram":
+        regex =
+          /^(https?:\/\/)?(www\.)?(instagram\.com\/[A-Za-z0-9_.]{1,30}\/?)$/;
+        break;
+      case "linkedin":
+        regex = /^(https?:\/\/)?(www\.)?(linkedin\.com\/in\/[A-Za-z0-9-]+\/?)$/;
+        break;
+      default:
+        return false;
+    }
+    return regex.test(url);
+  };
 
   function handleSubmit(event) {
     event.preventDefault();
+
+    if (
+      !validateUrl(twitterLink, "twitter") ||
+      !validateUrl(instagramLink, "instagram") ||
+      !validateUrl(linkedinLink, "linkedin")
+    ) {
+      setError("Please enter valid Twitter, Instagram, and LinkedIn links.");
+      return;
+    } else {
+      setError(""); // Clear the error message if all URLs are valid
+    }
 
     const newCard = {
       userIcon,
       userName,
       description,
-      socialLinks: [
-        { url: twitterLink },
-        { url: instagramLink },
-        { url: linkedinLink },
-      ],
+      twitterLink,
+      instagramLink,
+      linkedinLink,
     };
 
-    // Use the addCard function passed from the parent
     addCard(newCard);
 
-    // Clear the form fields
+    // Clear form fields
     setUserIcon("");
     setUserName("");
     setDescription("");
@@ -99,6 +128,9 @@ function Form({ addCard }) {
             />
             <span>LinkedIn Link</span>
           </label>
+
+          {error && <p className="error-message">{error}</p>}
+
           <button type="submit" className="submit">
             Submit
           </button>

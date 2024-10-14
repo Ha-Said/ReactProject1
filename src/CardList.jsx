@@ -12,7 +12,9 @@ function CardList({ cards }) {
                 userIcon={card.userIcon}
                 userName={card.userName}
                 description={card.description}
-                socialLinks={card.socialLinks}
+                twitterLink={card.twitterLink}
+                instagramLink={card.instagramLink}
+                linkedinLink={card.linkedinLink}
               />
             </div>
           ))}
